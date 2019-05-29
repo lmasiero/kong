@@ -28,7 +28,7 @@ env:
     - OPENRESTY=1.15.8.1
     - DOWNLOAD_ROOT=$HOME/download-root
     - INSTALL_CACHE=$HOME/install-cache
-    - OPENRESTY_PATCHES_BRANCH=master
+    - OPENRESTY_PATCHES_BRANCH=1.15.8.1
     - KONG_TEST_PG_DATABASE=travis
     - KONG_TEST_PG_USER=postgres
     - JOBS=2
