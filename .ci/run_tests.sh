@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-export BUSTED_ARGS="-o gtest -v --exclude-tags=flaky,ipv6"
+export BUSTED_ARGS="-o gtest -v --exclude-tags=flaky,ipv6 --tags=o"
 
 if [ "$KONG_TEST_DATABASE" == "postgres" ]; then
     export TEST_CMD="bin/busted $BUSTED_ARGS,cassandra,off"
@@ -23,7 +23,7 @@ if [ "$TEST_SUITE" == "dbless" ]; then
                      spec/02-integration/04-admin_api/15-off_spec.lua
 fi
 if [ "$TEST_SUITE" == "plugins" ]; then
-    eval "$TEST_CMD" spec/03-plugins/
+    eval "$TEST_CMD" spec/03-plugins/03-http-log
 fi
 if [ "$TEST_SUITE" == "pdk" ]; then
     TEST_NGINX_RANDOMIZE=1 prove -I. -j$JOBS -r t/01-pdk

@@ -390,10 +390,10 @@ for _, strategy in helpers.each_strategy() do
       end
 
 
-      it("logs to HTTP with a buffer", function()
+      it("#o logs to HTTP with a buffer", function()
         reset_log("http_queue")
 
-        local n = 1000
+        local n = 200
         for i = 1, n do
           local client = helpers.proxy_client()
           local res = assert(client:send({
@@ -421,6 +421,8 @@ for _, strategy in helpers.each_strategy() do
 
           -- we only get an exact count with workers == 1
           if workers == 1 and #body.log.entries ~= math.ceil(n / 5) then
+            print("EXIT | #body.log.entries:", #body.log.entries,
+                  " math.ceil(n / 5):", math.ceil(n / 5))
             return false
           end
 
@@ -430,6 +432,7 @@ for _, strategy in helpers.each_strategy() do
 
             -- we only get an exact split with workers == 1
             if workers == 1 and #json ~= 5 then
+              print("EXIT | #json: ", #json)
               return false
             end
             for _, item in ipairs(json) do
@@ -442,8 +445,9 @@ for _, strategy in helpers.each_strategy() do
               i = i + 1
             end
           end
+          print("EXIT | i: ", i, " n: ", n)
           return i == n
-        end, 15)
+        end, 30)
       end)
 
       it("does not mix buffers", function()
