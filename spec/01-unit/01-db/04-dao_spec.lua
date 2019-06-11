@@ -402,45 +402,19 @@ describe("DAO", function()
 
     it("converts null in composite cache_key to empty string", function()
       local schema = assert(Schema.new(optional_cache_key_fields_schema))
-
-      -- mock strategy
-      local data
-      local strategy = {
-        select = function()
-          return data
-        end,
-        update = function(_, _, value)
-          data = utils.deep_merge(data, value)
-          return data
-        end,
-      }
-
-      local dao = DAO.new(mock_db, schema, strategy, errors)
+      local dao = DAO.new(mock_db, schema, {}, errors)
 
       -- setting u as an explicit null
-      data = { a = 42, b = "foo", u = null }
+      local data = { a = 42, b = "foo", u = null }
       local cache_key = dao:cache_key(data)
       assert.equals("Foo:foo::::", cache_key)
     end)
 
     it("converts nil in composite cache_key to empty string", function()
       local schema = assert(Schema.new(optional_cache_key_fields_schema))
+      local dao = DAO.new(mock_db, schema, {}, errors)
 
-      -- mock strategy
-      local data
-      local strategy = {
-        select = function()
-          return data
-        end,
-        update = function(_, _, value)
-          data = utils.deep_merge(data, value)
-          return data
-        end,
-      }
-
-      local dao = DAO.new(mock_db, schema, strategy, errors)
-
-      data = { a = 42, b = "foo", u = nil }
+      local data = { a = 42, b = "foo", u = nil }
       local cache_key = dao:cache_key(data)
       assert.equals("Foo:foo::::", cache_key)
     end)
