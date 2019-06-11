@@ -293,6 +293,7 @@ local function get_collection_endpoint(schema, foreign_schema, foreign_field_nam
     end
 
     local next_page = offset and fmt("/%s?offset=%s%s",
+                                     schema.path_segment or
                                      schema.name,
                                      escape_uri(offset),
                                      next_page_tags) or null
@@ -323,8 +324,11 @@ local function get_collection_endpoint(schema, foreign_schema, foreign_field_nam
 
     local foreign_key = self.params[foreign_schema.name]
     local next_page = offset and fmt("/%s/%s/%s?offset=%s",
+                                     foreign_schema.path_segment or
                                      foreign_schema.name,
                                      foreign_key,
+                                     schema.nested_path_segment or
+                                     schema.path_segment or
                                      schema.name,
                                      escape_uri(offset)) or null
 
@@ -681,10 +685,16 @@ end
 local function generate_collection_endpoints(endpoints, schema, foreign_schema, foreign_field_name)
   local collection_path
   if foreign_schema then
-    collection_path = fmt("/%s/:%s/%s", foreign_schema.name, foreign_schema.name, schema.name)
+    collection_path = fmt("/%s/:%s/%s", foreign_schema.path_segment or
+                                        foreign_schema.name,
+                                        foreign_schema.name,
+                                        schema.nested_path_segment or
+                                        schema.path_segment or
+                                        schema.name)
 
   else
-    collection_path = fmt("/%s", schema.name)
+    collection_path = fmt("/%s", schema.path_segment or
+                                 schema.name)
   end
 
   endpoints[collection_path] = {
@@ -719,14 +729,24 @@ local function generate_entity_endpoints(endpoints, schema, foreign_schema, fore
     local inverse = not foreign_schema.fields[foreign_field_name] and
                                 schema.fields[foreign_field_name]
     if inverse then
-      entity_path = fmt("/%s/:%s/%s", schema.name, schema.name, foreign_field_name)
+      entity_path = fmt("/%s/:%s/%s", schema.path_segment or
+                                      schema.name,
+                                      schema.name,
+                                      foreign_field_name)
     else
-      entity_path = fmt("/%s/:%s/%s/:%s", schema.name, schema.name, foreign_schema.name,
+      entity_path = fmt("/%s/:%s/%s/:%s", schema.path_segment or
+                                          schema.name,
+                                          schema.name,
+                                          foreign_schema.nested_path_segment or
+                                          foreign_schema.path_segment or
+                                          foreign_schema.name,
                                           foreign_schema.name)
     end
 
   else
-    entity_path = fmt("/%s/:%s", schema.name, schema.name)
+    entity_path = fmt("/%s/:%s", schema.path_segment or
+                                 schema.name,
+                                 schema.name)
   end
 
   endpoints[entity_path] = {
