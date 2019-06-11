@@ -394,6 +394,18 @@ local MetaSchema = Schema.new({
       },
     },
     {
+      path_segment = {
+        type = "string",
+        nilable = true,
+      },
+    },
+    {
+      nested_path_segment = {
+        type = "string",
+        nilable = true,
+      },
+    },
+    {
       legacy = {
         type = "boolean",
         nilable = true,
