@@ -16,6 +16,8 @@ return {
     primary_key = { "id" },
     cache_key = { "key" },
     endpoint_key = "key",
+    path_segment = "jwts",
+    nested_path_segment = "jwt",
     fields = {
       { id = typedefs.uuid },
       { created_at = typedefs.auto_timestamp_s },

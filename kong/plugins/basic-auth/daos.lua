@@ -8,6 +8,8 @@ return {
     primary_key = { "id" },
     cache_key = { "username" },
     endpoint_key = "username",
+    path_segment = "basic-auths",
+    nested_path_segment = "basic-auth",
     fields = {
       { id = typedefs.uuid },
       { created_at = typedefs.auto_timestamp_s },

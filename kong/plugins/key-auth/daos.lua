@@ -6,6 +6,8 @@ return {
     name = "keyauth_credentials",
     endpoint_key = "key",
     cache_key = { "key" },
+    path_segment = "key-auths",
+    nested_path_segment = "key-auth",
     fields = {
       { id = typedefs.uuid },
       { created_at = typedefs.auto_timestamp_s },

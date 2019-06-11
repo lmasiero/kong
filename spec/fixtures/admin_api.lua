@@ -35,16 +35,17 @@ end
 
 local admin_api_as_db = {}
 
-for name, _ in pairs(helpers.db.daos) do
+for name, dao in pairs(helpers.db.daos) do
+  local path_segment = dao.schema.path_segment or name
   admin_api_as_db[name] = {
     insert = function(_, tbl)
-      return api_send("POST", "/" .. name, tbl)
+      return api_send("POST", "/" .. path_segment , tbl)
     end,
     remove = function(_, tbl)
-      return api_send("DELETE", "/" .. name .. "/" .. tbl.id)
+      return api_send("DELETE", "/" .. path_segment .. "/" .. tbl.id)
     end,
     update = function(_, id, tbl)
-      return api_send("PATCH", "/" .. name .. "/" .. id, tbl)
+      return api_send("PATCH", "/" .. path_segment .. "/" .. id, tbl)
     end,
   }
 end
